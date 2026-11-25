@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Bil Harian Kak Ngoh</title>
+  <meta name="description" content="Penjejak bil & belanja harian Kak Ngoh di Singapura — SGD ⇄ MYR, Bas & MRT." />
+  <meta name="theme-color" content="#1b1416" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Kak Ngoh" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="bg-shade" aria-hidden="true"></div>
+
+  <main class="app">
+    <!-- Header -->
+    <header class="top">
+      <div>
+        <p class="eyebrow" id="todayLabel">—</p>
+        <h1>Hai, <em>Kak Ngoh</em> <span class="wave">✨</span></h1>
+        <p class="sub">Bil harian di Singapura 🇸🇬</p>
+      </div>
+      <button class="icon-btn" id="openSettings" aria-label="Tetapan">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </button>
+    </header>
+
+    <!-- Hero total -->
+    <section class="card hero">
+      <div class="hero-row">
+        <div>
+          <p class="label" id="periodLabel">Belanja hari ini</p>
+          <p class="big" id="heroSgd">S$0.00</p>
+          <p class="small" id="heroMyr">≈ RM0.00</p>
+        </div>
+        <div class="ring" id="budgetRing" style="--p:0">
+          <div class="ring-inner">
+            <span id="ringPct">0%</span>
+            <small>bajet</small>
+          </div>
+        </div>
+      </div>
+      <div class="seg" role="tablist" id="periodSeg">
+        <button class="active" data-period="day">Hari ini</button>
+        <button data-period="week">Minggu</button>
+        <button data-period="month">Bulan</button>
+      </div>
+      <p class="budget-note" id="budgetNote"></p>
+    </section>
+
+    <!-- Transport quick tap -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Tambang pantas</h2>
+        <span class="chip-mini" id="transportToday">0 trip hari ini</span>
+      </div>
+      <div class="transport">
+        <button class="tbtn bus" data-quick="bus">
+          <span class="ticon">🚌</span>
+          <span class="tname">Bas</span>
+          <span class="tfare" id="busFareLbl">S$1.30</span>
+        </button>
+        <button class="tbtn mrt" data-quick="mrt">
+          <span class="ticon">🚇</span>
+          <span class="tname">MRT</span>
+          <span class="tfare" id="mrtFareLbl">S$1.30</span>
+        </button>
+      </div>
+      <p class="hint">Tekan sekali = satu perjalanan. Ubah tambang dalam ⚙︎ Tetapan.</p>
+    </section>
+
+    <!-- Exchange rate -->
+    <section class="card rate">
+      <div class="card-head">
+        <h2>Kadar tukaran</h2>
+        <button class="link-btn" id="refreshRate">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+          Kemas kini
+        </button>
+      </div>
+      <div class="rate-pair">
+        <div>
+          <p class="label">1 SGD</p>
+          <p class="rate-val" id="rateSgdMyr">RM —</p>
+        </div>
+        <div class="swap-ico">⇄</div>
+        <div>
+          <p class="label">1 MYR</p>
+          <p class="rate-val" id="rateMyrSgd">S$ —</p>
+        </div>
+      </div>
+      <div class="conv">
+        <label class="conv-field">
+          <span>SGD</span>
+          <input id="convSgd" inputmode="decimal" placeholder="0.00" />
+        </label>
+        <label class="conv-field">
+          <span>MYR</span>
+          <input id="convMyr" inputmode="decimal" placeholder="0.00" />
+        </label>
+      </div>
+      <p class="hint" id="rateMeta">Memuatkan kadar…</p>
+    </section>
+
+    <!-- Breakdown -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Pecahan kategori</h2>
+        <span class="chip-mini" id="breakdownPeriod">Hari ini</span>
+      </div>
+      <div id="breakdown" class="breakdown"></div>
+    </section>
+
+    <!-- List -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Rekod belanja</h2>
+        <button class="link-btn" id="exportCsv">Eksport CSV</button>
+      </div>
+      <div id="list" class="list"></div>
+    </section>
+
+    <footer class="foot">Dibuat dengan 💗 untuk Kak Ngoh · data disimpan dalam telefon ini sahaja</footer>
+  </main>
+
+  <!-- FAB -->
+  <button class="fab" id="openAdd" aria-label="Tambah belanja">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <!-- Add sheet -->
+  <div class="sheet-wrap" id="addSheet" aria-hidden="true">
+    <div class="sheet-backdrop" data-close></div>
+    <form class="sheet" id="addForm" autocomplete="off">
+      <div class="grab"></div>
+      <h3 id="sheetTitle">Tambah belanja</h3>
+
+      <div class="amount-row">
+        <div class="cur-toggle" id="curToggle">
+          <button type="button" class="active" data-cur="SGD">S$</button>
+          <button type="button" data-cur="MYR">RM</button>
+        </div>
+        <input id="amount" class="amount" inputmode="decimal" placeholder="0.00" required />
+      </div>
+      <p class="hint center" id="amountConv">≈ RM0.00</p>
+
+      <p class="label">Kategori</p>
+      <div class="cats" id="cats"></div>
+
+      <div class="two">
+        <label class="field">
+          <span>Tarikh</span>
+          <input type="date" id="date" required />
+        </label>
+        <label class="field">
+          <span>Masa</span>
+          <input type="time" id="time" />
+        </label>
+      </div>
+      <label class="field">
+        <span>Nota (pilihan)</span>
+        <input id="note" placeholder="cth: Jurong East → Raffles Place" maxlength="80" />
+      </label>
+
+      <div class="sheet-actions">
+        <button type="button" class="btn ghost" data-close>Batal</button>
+        <button type="submit" class="btn primary" id="saveBtn">Simpan</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Settings sheet -->
+  <div class="sheet-wrap" id="settingsSheet" aria-hidden="true">
+    <div class="sheet-backdrop" data-close></div>
+    <form class="sheet" id="settingsForm">
+      <div class="grab"></div>
+      <h3>Tetapan</h3>
+      <div class="two">
+        <label class="field">
+          <span>Bajet harian (S$)</span>
+          <input id="setBudget" inputmode="decimal" />
+        </label>
+        <label class="field">
+          <span>Kadar manual (1 SGD = RM)</span>
+          <input id="setRate" inputmode="decimal" placeholder="auto" />
+        </label>
+      </div>
+      <div class="two">
+        <label class="field">
+          <span>Tambang Bas (S$)</span>
+          <input id="setBus" inputmode="decimal" />
+        </label>
+        <label class="field">
+          <span>Tambang MRT (S$)</span>
+          <input id="setMrt" inputmode="decimal" />
+        </label>
+      </div>
+      <p class="hint">Biarkan "kadar manual" kosong untuk guna kadar terkini secara automatik.</p>
+      <div class="sheet-actions">
+        <button type="button" class="btn ghost danger" id="wipeAll">Padam semua</button>
+        <button type="submit" class="btn primary">Simpan</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
