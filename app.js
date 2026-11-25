@@ -377,6 +377,6 @@
   if (!state.rate.time || Date.now() - state.rate.time > 3 * 3600e3) fetchRate(false);
 
   if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+    navigator.serviceWorker.register("sw.js?v=4").catch(() => {});
   }
 })();
