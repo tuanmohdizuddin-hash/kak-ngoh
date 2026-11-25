@@ -1,13 +1,12 @@
 # Bil Harian Kak Ngoh 🇸🇬
 
-App web (PWA) untuk jejak bil & belanja harian semasa bekerja di Singapura.
+App web (PWA) untuk Kak Ngoh menjejak bil & belanja harian semasa bekerja di Singapura. Reka bentuk sama seperti app Belanja Adieb, tema purple-gold.
 
 - Tambang pantas **Bas** & **MRT** — satu tekan = satu trip (tambang boleh ubah dalam Tetapan)
-- Tambah belanja dalam **SGD atau MYR**, 12 kategori (Makan, Sewa, Kirim Duit, Grab, dll.)
-- Kadar tukaran **SGD ⇄ MYR** terkini (auto setiap 3 jam) + penukar dua hala, atau kadar manual
-- Jumlah Hari ini / Minggu / Bulan, cincin bajet, pecahan kategori
-- Eksport CSV, berfungsi offline, boleh "Add to Home Screen"
+- Rekod dengan **suara** (cth: "makan 6 dolar 50 nasi lemak guna paynow") atau **taip**, dalam **S$ atau RM**
+- **Kadar tukaran SGD ⇄ MYR** terkini + penukar dua hala, atau kadar manual
+- Cara bayar: EZ-Link/SimplyGo, PayNow/QR, Kad/Bank, Tunai
+- Dashboard hari ini / minggu / bulan (S$ + anggaran RM), baki bajet, carta harian, rumusan mingguan, carta kategori
+- Eksport CSV; data dalam peranti (localStorage); boleh install ke skrin utama
 
-Data disimpan dalam telefon (localStorage) sahaja.
-
-Untuk guna di telefon: aktifkan **GitHub Pages** (Settings → Pages → deploy from branch) dan buka link itu, kemudian "Add to Home Screen".
+Hoskan dengan GitHub Pages (Settings → Pages → branch ini), kemudian buka link `https://…github.io/kak-ngoh/`.

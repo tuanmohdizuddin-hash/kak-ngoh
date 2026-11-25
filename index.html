@@ -1,232 +1,822 @@
 <!doctype html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Bil Harian Kak Ngoh</title>
-  <meta name="description" content="Penjejak bil & belanja harian Kak Ngoh di Singapura — SGD ⇄ MYR, Bas & MRT." />
-  <meta name="theme-color" content="#17111f" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Kak Ngoh" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="assets/icon-192.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=5" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bil Harian Kak Ngoh</title>
+<meta name="theme-color" content="#120c1a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kak Ngoh">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold-1:#f7e7a1; --gold-2:#e2b84a; --gold-3:#b8862b; --gold-4:#8a6118;
+  --silver-1:#f4eefe; --silver-2:#cdbde9; --silver-3:#a08bc8; --silver-4:#715d98;
+  --ink:#1a1022; --panel:rgba(20,12,30,.64); --panel-2:rgba(30,18,44,.8);
+  --line:rgba(226,184,74,.30); --line-s:rgba(205,189,233,.22);
+  --text:#f6f2fb; --muted:#bfb3d3; --danger:#ff8a7a; --ok:#9be3b5;
+  --gold-grad:linear-gradient(135deg,#fff3c4 0%,#e9c45c 30%,#b8862b 60%,#f2d77e 100%);
+  --silver-grad:linear-gradient(135deg,#f3e9ff 0%,#c9a8f4 35%,#7b52c4 65%,#e7d8ff 100%);
+  --radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:"Plus Jakarta Sans",system-ui,sans-serif; color:var(--text);
+  background:#120c1a; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+.bg{position:fixed;inset:0;z-index:-2;background:url("assets/bg.jpg?v=6") center 28%/cover no-repeat;transform:scale(1.04);animation:kb 40s ease-in-out infinite alternate}
+.bg::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(18,12,26,.82) 0%,rgba(18,12,26,.35) 12%,rgba(18,12,26,.06) 24%,rgba(18,12,26,.12) 42%,rgba(18,12,26,.74) 70%,rgba(18,12,26,.93) 100%)}
+@keyframes kb{to{transform:scale(1.12) translateY(-1.5%)}}
+@media (prefers-reduced-motion:reduce){.bg{animation:none}}
+.wrap{max-width:1180px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 16px 120px}
+
+/* header */
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--gold-grad);display:grid;place-items:center;color:var(--ink);font-family:"Playfair Display";font-weight:700;font-size:22px;box-shadow:0 6px 24px rgba(226,184,74,.35),inset 0 1px 0 #fff8}
+h1{font-family:"Playfair Display",serif;font-size:clamp(20px,4vw,28px);line-height:1.1;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:12.5px;color:var(--silver-2);letter-spacing:.04em}
+.hdr-r{display:flex;gap:8px;align-items:center}
+select,input,textarea{font:inherit;color:var(--text);background:rgba(255,255,255,.06);border:1px solid var(--line-s);border-radius:12px;padding:10px 12px;outline:none;width:100%}
+select:focus,input:focus{border-color:var(--gold-2);box-shadow:0 0 0 3px rgba(226,184,74,.18)}
+select option{background:#1d1428;color:var(--text)}
+input[type=month]{width:auto}
+::-webkit-calendar-picker-indicator{filter:invert(.8);cursor:pointer}
+.datebox{position:relative}
+.datebox input{color:transparent;cursor:pointer}
+.datebox input::-webkit-datetime-edit{opacity:0}
+.datebox .dtxt{position:absolute;left:13px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text);font-variant-numeric:tabular-nums}
+
+.glass{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);box-shadow:0 10px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
+.card{padding:18px}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--silver-2);font-weight:600;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card h2 .tag{font-size:11px;letter-spacing:.06em;text-transform:none;color:var(--gold-1);background:rgba(226,184,74,.12);border:1px solid var(--line);padding:3px 9px;border-radius:99px}
+
+/* hero */
+.hero{min-height:clamp(230px,46vh,440px);display:flex;align-items:flex-end;margin-bottom:16px}
+.hero-in{padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(20,12,30,.76),rgba(20,12,30,.38));border:1px solid var(--line);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);max-width:520px}
+.hero-in .hi{font-size:13px;color:var(--silver-1);letter-spacing:.04em}
+.hero-in .big{font-family:"Playfair Display",serif;font-size:clamp(22px,5vw,32px);line-height:1.2;margin-top:2px}
+.hero-in .big b{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-in .meta{font-size:12.5px;color:var(--silver-2);margin-top:6px}
+/* pay tabs */
+.people{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:none}
+.people::-webkit-scrollbar{display:none}
+.pill{flex:0 0 auto;border:1px solid var(--line-s);background:rgba(255,255,255,.05);color:var(--silver-1);padding:9px 16px;border-radius:99px;font-weight:600;font-size:14px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:8px;font-family:inherit}
+.pill .dot{width:9px;height:9px;border-radius:50%}
+.pill.on{background:var(--gold-grad);color:var(--ink);border-color:transparent;box-shadow:0 6px 20px rgba(226,184,74,.3)}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{padding:16px;position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:var(--gold-grad)}
+.kpi.s::before{background:var(--silver-grad)}
+.kpi .l{font-size:12px;color:var(--silver-2);letter-spacing:.05em}
+.kpi .v{font-family:"Playfair Display",serif;font-size:clamp(20px,3.2vw,28px);margin-top:6px;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums}
+.kpi.s .v{background:var(--silver-grad);-webkit-background-clip:text;background-clip:text}
+.kpi .n{font-size:11.5px;color:var(--muted);margin-top:4px}
+.kpi .rm{font-size:12px;color:var(--gold-1);margin-top:2px;font-variant-numeric:tabular-nums}
+.bar{height:7px;background:rgba(255,255,255,.08);border-radius:99px;margin-top:8px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--gold-grad);border-radius:99px;transition:width .6s}
+.bar.warn>i{background:linear-gradient(90deg,#f2c46b,#ff8a7a)}
+
+.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:14px}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
+
+/* transport quick */
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qbtn{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;text-align:left;padding:12px 14px;border-radius:16px;border:1px solid var(--line);background:rgba(226,184,74,.1);color:var(--text);font:inherit;cursor:pointer;transition:.15s;touch-action:manipulation}
+.qbtn.mrt{background:rgba(160,120,230,.16);border-color:var(--line-s)}
+.qbtn:active{transform:scale(.97)}
+.qbtn .qi{grid-row:1/3;font-size:24px;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.08)}
+.qbtn b{font-size:15px}
+.qbtn small{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.qnote{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* input card */
+.entry{display:grid;gap:10px}
+.amt-row{display:flex;gap:10px;align-items:stretch}
+.cur{display:flex;flex-direction:column;gap:4px;padding:4px;border-radius:14px;border:1px solid var(--line-s);background:rgba(255,255,255,.04)}
+.cur button{border:0;background:none;color:var(--silver-2);font:inherit;font-weight:700;font-size:13px;padding:4px 10px;border-radius:10px;cursor:pointer;flex:1}
+.cur button.on{background:var(--gold-grad);color:var(--ink)}
+.amt{position:relative;flex:1;min-width:0}
+.amt span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--gold-2);font-weight:700}
+.amt input{padding-left:46px;touch-action:manipulation;font-size:22px;font-weight:700;height:56px;font-variant-numeric:tabular-nums}
+.conv-hint{font-size:12px;color:var(--gold-1);min-height:16px;font-variant-numeric:tabular-nums}
+.mic{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;width:56px;height:56px;border-radius:16px;border:0;background:var(--gold-grad);color:var(--ink);cursor:pointer;display:grid;place-items:center;flex:0 0 auto;box-shadow:0 6px 22px rgba(226,184,74,.35);transition:.2s;align-self:center}
+.mic svg{width:24px;height:24px}
+.mic.rec{background:linear-gradient(135deg,#ff9b8a,#e0453a);color:#fff;animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,120,100,.6)}100%{box-shadow:0 0 0 18px rgba(255,120,100,0)}}
+.voice-hint{font-size:12px;color:var(--muted);min-height:18px}
+.voice-hint b{color:var(--gold-1);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line-s);background:rgba(255,255,255,.05);color:var(--silver-1);padding:7px 11px;border-radius:99px;font-size:13px;cursor:pointer;transition:.15s;display:inline-flex;gap:6px;align-items:center;font-family:inherit}
+.chip:hover{border-color:var(--gold-2)}
+.chip.on{background:rgba(226,184,74,.2);border-color:var(--gold-2);color:var(--gold-1)}
+.chip.add{border-style:dashed;color:var(--gold-1)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lbl{font-size:12px;color:var(--silver-2);margin-bottom:5px;display:block}
+.btn{border:0;border-radius:14px;padding:14px 18px;font:inherit;font-weight:700;cursor:pointer;transition:.2s}
+.btn.gold{background:var(--gold-grad);color:var(--ink);box-shadow:0 8px 26px rgba(226,184,74,.3)}
+.btn.gold:active{transform:scale(.98)}
+.btn.ghost{white-space:nowrap;background:rgba(255,255,255,.06);color:var(--silver-1);border:1px solid var(--line-s);padding:9px 13px;font-weight:600;font-size:13px}
+.btn.ghost:hover{border-color:var(--gold-2);color:var(--gold-1)}
+.card h2 .btn.ghost{text-transform:none;letter-spacing:0;padding:6px 11px;font-size:12px}
+
+/* rate */
+.rate-pair{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}
+.rate-pair>div:last-child{text-align:right}
+.rate-pair .l{font-size:12px;color:var(--silver-2)}
+.rate-pair .v{font-family:"Playfair Display",serif;font-size:24px;font-variant-numeric:tabular-nums;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rate-pair>div:last-child .v{background:var(--silver-grad);-webkit-background-clip:text;background-clip:text}
+.swap{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--gold-grad);color:var(--ink);font-weight:700}
+.conv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:12px}
+.conv label{position:relative;display:block;min-width:0}
+.conv label span{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:var(--gold-2)}
+.conv input{padding-left:46px;text-align:right;font-weight:700;font-size:17px;font-variant-numeric:tabular-nums}
+.rate-meta{font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+
+/* charts */
+.chart{width:100%;height:auto;display:block}
+.chart text{font-family:"Plus Jakarta Sans";fill:var(--silver-2);font-size:10px}
+.legend{display:grid;gap:8px;margin-top:6px}
+.lg{display:grid;grid-template-columns:14px 1fr auto auto;gap:8px;align-items:center;font-size:13px}
+.lg i{width:12px;height:12px;border-radius:4px}
+.lg .p{color:var(--muted);font-size:12px;width:40px;text-align:right}
+.lg .a{font-variant-numeric:tabular-nums;font-weight:600}
+.donut-wrap{display:grid;grid-template-columns:160px 1fr;gap:16px;align-items:center}
+
+.weeks{display:grid;gap:10px}
+.wk{display:grid;grid-template-columns:78px 1fr 88px;gap:10px;align-items:center;font-size:13px}
+.wk .nm{color:var(--silver-1);font-weight:600}
+.wk .nm small{display:block;color:var(--muted);font-weight:400;font-size:11px}
+.wk .tt{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--gold-1)}
+.wk .bar{margin:0;height:10px}
+.wk.now .nm{color:var(--gold-1)}
+.insight{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(226,184,74,.08);border:1px solid var(--line);font-size:13px;line-height:1.55;color:var(--silver-1)}
+.insight b{color:var(--gold-1)}
+
+.persons{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:420px){.persons{grid-template-columns:repeat(2,1fr)}}
+.pc{padding:12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line-s);text-align:center}
+.pc .av{width:42px;height:42px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;font-weight:700;color:var(--ink);font-size:18px}
+.pc .nm{font-size:12.5px;color:var(--silver-2)}
+.pc .vv{font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+
+/* list */
+.list{display:flex;flex-direction:column;gap:6px;max-height:460px;overflow:auto;padding-right:4px}
+.day-h{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2);margin:10px 2px 2px;display:flex;justify-content:space-between}
+.day-h:first-child{margin-top:0}
+.tx{display:grid;grid-template-columns:38px 1fr auto 28px;gap:10px;align-items:center;padding:10px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid transparent}
+.tx:hover{border-color:var(--line-s)}
+.tx .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:18px;background:rgba(255,255,255,.07)}
+.tx .t1{font-weight:600;font-size:14px}
+.tx .t2{font-size:12px;color:var(--muted)}
+.tx .am{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.tx .am small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
+.del{background:none;border:0;color:var(--silver-4);cursor:pointer;font-size:18px;border-radius:8px;height:28px}
+.del:hover{color:var(--danger);background:rgba(255,138,122,.1)}
+.empty{text-align:center;color:var(--muted);padding:24px 8px;font-size:14px}
+
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.toast{visibility:hidden;opacity:0;position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(120px);background:var(--panel-2);border:1px solid var(--gold-2);color:var(--gold-1);padding:12px 18px;border-radius:14px;font-weight:600;font-size:14px;transition:.35s;z-index:50;backdrop-filter:blur(12px);max-width:calc(100% - 32px)}
+.toast.on{visibility:visible;opacity:1;transform:translateX(-50%) translateY(0)}
+footer{text-align:center;font-size:12px;color:var(--silver-3);margin-top:22px}
+
+dialog{margin:auto;border:1px solid var(--line);border-radius:20px;background:#1b1326;color:var(--text);padding:20px;width:min(420px,calc(100% - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+dialog h3{font-family:"Playfair Display";color:var(--gold-1);margin-bottom:12px}
+dialog .act{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+dialog .f{margin-bottom:10px}
+dialog .hint{font-size:12px;color:var(--muted);line-height:1.5}
+
+@media (max-width:600px){.hero{min-height:70vh}}
+@media (max-width:900px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:420px){.donut-wrap{grid-template-columns:1fr}.donut-wrap svg{max-width:180px;margin:0 auto}.row2{grid-template-columns:1fr}.wk{grid-template-columns:66px 1fr 78px}.rate-pair .v{font-size:20px}}
+</style>
 </head>
 <body>
-  <div class="bg" aria-hidden="true"></div>
-  <div class="bg-shade" aria-hidden="true"></div>
-
-  <main class="app">
-    <!-- Header -->
-    <header class="top">
+<div class="bg" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">K</div>
       <div>
-        <p class="eyebrow" id="todayLabel">—</p>
-        <h1>Hai, <em>Kak Ngoh</em> <span class="wave">✨</span></h1>
-        <p class="sub">Bil harian di Singapura 🇸🇬</p>
+        <h1>Bil Harian Kak Ngoh</h1>
+        <div class="sub">Singapura 🇸🇬 · Track belanja harian &amp; mingguan</div>
       </div>
-      <button class="icon-btn" id="openSettings" aria-label="Tetapan">
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
-      </button>
-    </header>
+    </div>
+    <div class="hdr-r">
+      <input type="month" id="month" aria-label="Pilih bulan">
+      <button class="btn ghost" id="btnInstall" hidden style="border-color:var(--gold-2);color:var(--gold-1)">📲 Install</button>
+      <button class="btn ghost" id="btnBudget" title="Tetapan">⚙︎ Tetapan</button>
+    </div>
+  </header>
 
-    <!-- Hero total -->
-    <section class="card hero">
-      <div class="hero-row">
-        <div>
-          <p class="label" id="periodLabel">Belanja hari ini</p>
-          <p class="big" id="heroSgd">S$0.00</p>
-          <p class="small" id="heroMyr">≈ RM0.00</p>
+  <section class="hero" aria-label="Sapaan">
+    <div class="hero-in">
+      <div class="hi" id="hHi">Assalamualaikum, Kak Ngoh 🌸</div>
+      <div class="big">Bulan ini: <b id="hTotal">S$0.00</b></div>
+      <div class="meta" id="hMeta">—</div>
+    </div>
+  </section>
+
+  <nav class="people" id="people"></nav>
+
+  <section class="kpis">
+    <div class="glass kpi"><div class="l">Hari Ini</div><div class="v" id="kToday">S$0.00</div><div class="rm" id="kTodayRm">≈ RM0.00</div><div class="n" id="kTodayN">—</div></div>
+    <div class="glass kpi s"><div class="l">Minggu Ini</div><div class="v" id="kWeek">S$0.00</div><div class="rm" id="kWeekRm">≈ RM0.00</div><div class="n" id="kWeekN">—</div></div>
+    <div class="glass kpi"><div class="l">Bulan Ini</div><div class="v" id="kMonth">S$0.00</div><div class="rm" id="kMonthRm">≈ RM0.00</div><div class="n" id="kMonthN">—</div></div>
+    <div class="glass kpi s"><div class="l">Baki Bajet</div><div class="v" id="kLeft">S$0.00</div><div class="bar" id="kBar"><i style="width:0"></i></div><div class="n" id="kLeftN">—</div></div>
+  </section>
+
+  <div class="grid">
+    <div class="col">
+      <section class="glass card">
+        <h2>Tambang Pantas <span class="tag" id="tripTag">0 trip hari ini</span></h2>
+        <div class="quick">
+          <button type="button" class="qbtn" data-quick="Bas"><span class="qi">🚌</span><b>Bas</b><small id="busFare">S$1.30</small></button>
+          <button type="button" class="qbtn mrt" data-quick="MRT"><span class="qi">🚇</span><b>MRT</b><small id="mrtFare">S$1.30</small></button>
         </div>
-        <div class="ring" id="budgetRing" style="--p:0">
-          <div class="ring-inner">
-            <span id="ringPct">0%</span>
-            <small>bajet</small>
+        <div class="qnote">Tekan sekali = satu perjalanan (EZ-Link / SimplyGo). Tukar tambang dalam ⚙︎ Tetapan.</div>
+      </section>
+
+      <section class="glass card">
+        <h2>Tambah Perbelanjaan <span class="tag">🎙 Suara atau Taip</span></h2>
+        <form class="entry" id="form" autocomplete="off">
+          <div class="amt-row">
+            <div class="cur" id="cur"><button type="button" class="on" data-cur="SGD">S$</button><button type="button" data-cur="MYR">RM</button></div>
+            <label class="amt"><span id="curSym">S$</span><input id="fAmt" type="text" inputmode="decimal" enterkeyhint="done" placeholder="0.00" aria-label="Jumlah"></label>
+            <button type="button" class="mic" id="mic" aria-label="Rekod suara">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+            </button>
           </div>
+          <div class="conv-hint" id="convHint"></div>
+          <div class="voice-hint" id="vHint">Tekan 🎙 dan sebut, contoh: <b>“makan 6 dolar 50 nasi lemak guna paynow”</b></div>
+          <div>
+            <span class="lbl">Kategori</span>
+            <div class="chips" id="cats"></div>
+          </div>
+          <div class="row2">
+            <div><label class="lbl" for="fWho">Cara bayar</label><select id="fWho"></select></div>
+            <div><label class="lbl" for="fDate">Tarikh</label><div class="datebox"><input id="fDate" type="date"><span class="dtxt" id="fDateTxt"></span></div></div>
+          </div>
+          <div><label class="lbl" for="fNote">Catatan</label><input id="fNote" placeholder="cth: Nasi lemak Tampines, topup Singtel, kirim duit mak…"></div>
+          <button class="btn gold" type="submit">＋ Simpan Perbelanjaan</button>
+        </form>
+      </section>
+
+      <section class="glass card">
+        <h2>Perbelanjaan Harian <span class="tag" id="dailyTag">—</span></h2>
+        <svg class="chart" id="daily" viewBox="0 0 640 220" role="img" aria-label="Carta perbelanjaan harian"></svg>
+      </section>
+
+      <section class="glass card">
+        <h2>Rumusan Mingguan <span class="tag" id="weekTag">—</span></h2>
+        <div class="weeks" id="weeks"></div>
+        <div class="insight" id="insight"></div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="glass card">
+        <h2>Kadar Tukaran <button class="btn ghost" id="btnRate" type="button">↻ Kemas kini</button></h2>
+        <div class="rate-pair">
+          <div><div class="l">1 SGD</div><div class="v" id="r1">RM —</div></div>
+          <div class="swap">⇄</div>
+          <div><div class="l">1 MYR</div><div class="v" id="r2">S$ —</div></div>
         </div>
-      </div>
-      <div class="seg" role="tablist" id="periodSeg">
-        <button class="active" data-period="day">Hari ini</button>
-        <button data-period="week">Minggu</button>
-        <button data-period="month">Bulan</button>
-      </div>
-      <p class="budget-note" id="budgetNote"></p>
-    </section>
-
-    <!-- Transport quick tap -->
-    <section class="card">
-      <div class="card-head">
-        <h2>Tambang pantas</h2>
-        <span class="chip-mini" id="transportToday">0 trip hari ini</span>
-      </div>
-      <div class="transport">
-        <button class="tbtn bus" data-quick="bus">
-          <span class="ticon">🚌</span>
-          <span class="tname">Bas</span>
-          <span class="tfare" id="busFareLbl">S$1.30</span>
-        </button>
-        <button class="tbtn mrt" data-quick="mrt">
-          <span class="ticon">🚇</span>
-          <span class="tname">MRT</span>
-          <span class="tfare" id="mrtFareLbl">S$1.30</span>
-        </button>
-      </div>
-      <p class="hint">Tekan sekali = satu perjalanan. Ubah tambang dalam ⚙︎ Tetapan.</p>
-    </section>
-
-    <!-- Exchange rate -->
-    <section class="card rate">
-      <div class="card-head">
-        <h2>Kadar tukaran</h2>
-        <button class="link-btn" id="refreshRate">
-          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
-          Kemas kini
-        </button>
-      </div>
-      <div class="rate-pair">
-        <div>
-          <p class="label">1 SGD</p>
-          <p class="rate-val" id="rateSgdMyr">RM —</p>
+        <div class="conv">
+          <label><span>SGD</span><input id="cSgd" inputmode="decimal" value="1.00" aria-label="Jumlah SGD"></label>
+          <label><span>MYR</span><input id="cMyr" inputmode="decimal" aria-label="Jumlah MYR"></label>
         </div>
-        <div class="swap-ico">⇄</div>
-        <div>
-          <p class="label">1 MYR</p>
-          <p class="rate-val" id="rateMyrSgd">S$ —</p>
+        <div class="rate-meta" id="rateMeta">Memuatkan kadar…</div>
+      </section>
+
+      <section class="glass card">
+        <h2>Ikut Kategori</h2>
+        <div class="donut-wrap">
+          <svg class="chart" id="donut" viewBox="0 0 160 160" role="img" aria-label="Carta kategori"></svg>
+          <div class="legend" id="legend"></div>
         </div>
-      </div>
-      <div class="conv">
-        <label class="conv-field">
-          <span>SGD</span>
-          <input id="convSgd" inputmode="decimal" placeholder="0.00" />
-        </label>
-        <label class="conv-field">
-          <span>MYR</span>
-          <input id="convMyr" inputmode="decimal" placeholder="0.00" />
-        </label>
-      </div>
-      <p class="hint" id="rateMeta">Memuatkan kadar…</p>
-    </section>
+      </section>
 
-    <!-- Breakdown -->
-    <section class="card">
-      <div class="card-head">
-        <h2>Pecahan kategori</h2>
-        <span class="chip-mini" id="breakdownPeriod">Hari ini</span>
-      </div>
-      <div id="breakdown" class="breakdown"></div>
-    </section>
+      <section class="glass card">
+        <h2>Ikut Cara Bayar</h2>
+        <div class="persons" id="persons"></div>
+      </section>
 
-    <!-- List -->
-    <section class="card">
-      <div class="card-head">
-        <h2>Rekod belanja</h2>
-        <button class="link-btn" id="exportCsv">Eksport CSV</button>
-      </div>
-      <div id="list" class="list"></div>
-    </section>
-
-    <footer class="foot">Dibuat dengan 💗 untuk Kak Ngoh · data disimpan dalam telefon ini sahaja</footer>
-  </main>
-
-  <!-- FAB -->
-  <button class="fab" id="openAdd" aria-label="Tambah belanja">
-    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-  </button>
-
-  <!-- Add sheet -->
-  <div class="sheet-wrap" id="addSheet" aria-hidden="true">
-    <div class="sheet-backdrop" data-close></div>
-    <form class="sheet" id="addForm" autocomplete="off">
-      <div class="grab"></div>
-      <h3 id="sheetTitle">Tambah belanja</h3>
-
-      <div class="amount-row">
-        <div class="cur-toggle" id="curToggle">
-          <button type="button" class="active" data-cur="SGD">S$</button>
-          <button type="button" data-cur="MYR">RM</button>
-        </div>
-        <input id="amount" class="amount" inputmode="decimal" placeholder="0.00" required />
-      </div>
-      <p class="hint center" id="amountConv">≈ RM0.00</p>
-
-      <p class="label">Kategori</p>
-      <div class="cats" id="cats">
-        <button type="button" class="cat" data-cat="bus"><span>🚌</span>Bas</button>
-        <button type="button" class="cat" data-cat="mrt"><span>🚇</span>MRT</button>
-        <button type="button" class="cat" data-cat="grab"><span>🚕</span>Grab/Teksi</button>
-        <button type="button" class="cat" data-cat="makan"><span>🍛</span>Makan</button>
-        <button type="button" class="cat" data-cat="minum"><span>🧋</span>Minum</button>
-        <button type="button" class="cat" data-cat="barang"><span>🛒</span>Barang</button>
-        <button type="button" class="cat" data-cat="sewa"><span>🏠</span>Sewa</button>
-        <button type="button" class="cat" data-cat="bil"><span>📱</span>Bil/Topup</button>
-        <button type="button" class="cat" data-cat="kirim"><span>💸</span>Kirim Duit</button>
-        <button type="button" class="cat" data-cat="shopping"><span>🛍️</span>Shopping</button>
-        <button type="button" class="cat" data-cat="kesihatan"><span>💊</span>Kesihatan</button>
-        <button type="button" class="cat" data-cat="lain"><span>✨</span>Lain-lain</button>
-      </div>
-
-      <div class="two">
-        <label class="field">
-          <span>Tarikh</span>
-          <input type="date" id="date" required />
-        </label>
-        <label class="field">
-          <span>Masa</span>
-          <input type="time" id="time" />
-        </label>
-      </div>
-      <label class="field">
-        <span>Nota (pilihan)</span>
-        <input id="note" placeholder="cth: Jurong East → Raffles Place" maxlength="80" />
-      </label>
-
-      <div class="sheet-actions">
-        <button type="button" class="btn ghost" data-close>Batal</button>
-        <button type="submit" class="btn primary" id="saveBtn">Simpan</button>
-      </div>
-    </form>
+      <section class="glass card">
+        <h2>Senarai Transaksi
+          <span class="tools">
+            <button class="btn ghost" id="btnCsv">⬇ CSV</button>
+          </span>
+        </h2>
+        <div class="list" id="list"></div>
+      </section>
+    </div>
   </div>
+  <footer>Data disimpan dalam peranti ini sahaja · Dibina khas untuk Kak Ngoh 🌸</footer>
+</div>
 
-  <!-- Settings sheet -->
-  <div class="sheet-wrap" id="settingsSheet" aria-hidden="true">
-    <div class="sheet-backdrop" data-close></div>
-    <form class="sheet" id="settingsForm">
-      <div class="grab"></div>
-      <h3>Tetapan</h3>
-      <div class="two">
-        <label class="field">
-          <span>Bajet harian (S$)</span>
-          <input id="setBudget" inputmode="decimal" />
-        </label>
-        <label class="field">
-          <span>Kadar manual (1 SGD = RM)</span>
-          <input id="setRate" inputmode="decimal" placeholder="auto" />
-        </label>
-      </div>
-      <div class="two">
-        <label class="field">
-          <span>Tambang Bas (S$)</span>
-          <input id="setBus" inputmode="decimal" />
-        </label>
-        <label class="field">
-          <span>Tambang MRT (S$)</span>
-          <input id="setMrt" inputmode="decimal" />
-        </label>
-      </div>
-      <p class="hint">Biarkan "kadar manual" kosong untuk guna kadar terkini secara automatik.</p>
-      <div class="sheet-actions">
-        <button type="button" class="btn ghost danger" id="wipeAll">Padam semua</button>
-        <button type="submit" class="btn primary">Simpan</button>
-      </div>
-    </form>
+<dialog id="dlgBudget">
+  <h3>Tetapan</h3>
+  <div class="f"><label class="lbl" for="budgetIn">Bajet sebulan (S$)</label><input id="budgetIn" type="number" inputmode="decimal" min="0" step="1"></div>
+  <div class="row2 f">
+    <div><label class="lbl" for="busIn">Tambang Bas (S$)</label><input id="busIn" type="number" inputmode="decimal" min="0" step="0.01"></div>
+    <div><label class="lbl" for="mrtIn">Tambang MRT (S$)</label><input id="mrtIn" type="number" inputmode="decimal" min="0" step="0.01"></div>
   </div>
+  <div class="f"><label class="lbl" for="rateIn">Kadar manual: 1 SGD = RM (kosongkan untuk auto)</label><input id="rateIn" type="number" inputmode="decimal" min="0" step="0.0001" placeholder="auto"></div>
+  <div class="hint">Kadar auto diambil dari internet. Isi kadar manual kalau mahu ikut kadar app kirim duit.</div>
+  <div class="act"><button class="btn ghost" data-close>Batal</button><button class="btn gold" id="budgetSave">Simpan</button></div>
+</dialog>
+<dialog id="dlgCat">
+  <h3>Kategori Baharu</h3>
+  <label class="lbl" for="catName">Nama kategori</label>
+  <input id="catName" placeholder="cth: Yuran Kelas">
+  <label class="lbl" for="catIcon" style="margin-top:10px">Ikon (emoji, pilihan)</label>
+  <input id="catIcon" placeholder="🏷️" maxlength="4">
+  <div class="act"><button class="btn ghost" data-close>Batal</button><button class="btn gold" id="catSave">Tambah</button></div>
+</dialog>
 
-  <div class="toast" id="toast" role="status"></div>
+<dialog id="dlgInstall">
+  <h3>Install ke Telefon</h3>
+  <div id="installMsg" style="font-size:14px;line-height:1.6;color:var(--silver-1)"></div>
+  <div class="act"><button class="btn gold" data-close>OK</button></div>
+</dialog>
+<div class="toast" id="toast"></div>
 
-  <script src="app.js?v=5"></script>
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const KEY = 'bilKakNgoh.v2';
+const FALLBACK_RATE = 3.30;
+
+const PEOPLE = [
+  {id:'ezlink', name:'EZ-Link / SimplyGo', short:'EZ-Link', color:'#e2b84a', icon:'🚇'},
+  {id:'paynow', name:'PayNow / QR', short:'PayNow', color:'#c9a8f4', icon:'📱'},
+  {id:'kad', name:'Kad / Bank', short:'Kad', color:'#8fb4d6', icon:'💳'},
+  {id:'tunai', name:'Tunai', short:'Tunai', color:'#f2a7b8', icon:'💵'},
+];
+const DEFAULT_CATS = [
+  {name:'Makanan', icon:'🍛', kw:['makan','makanan','nasi','hawker','kopitiam','food court','kedai','restoran','sarapan','lunch','dinner','roti','prata','mee','ayam','burger','mcd','kfc','lemak']},
+  {name:'Minuman', icon:'🧋', kw:['kopi','coffee','teh','minum','minuman','air','boba','milo','bubble tea','starbucks']},
+  {name:'Bas', icon:'🚌', kw:['bas','bus']},
+  {name:'MRT', icon:'🚇', kw:['mrt','lrt','train','tren']},
+  {name:'Grab / Teksi', icon:'🚕', kw:['grab','gojek','teksi','taxi','tada','cdg']},
+  {name:'Barang Dapur', icon:'🛒', kw:['ntuc','fairprice','giant','sheng siong','barang','dapur','groceries','pasar','mustafa']},
+  {name:'Sewa Bilik', icon:'🏠', kw:['sewa','bilik','rumah','hdb','room','rent']},
+  {name:'Bil & Topup', icon:'📶', kw:['topup','top up','reload','singtel','starhub','m1','giga','data','telefon','bil','utiliti','api','elektrik']},
+  {name:'Kirim Duit', icon:'💸', kw:['kirim','hantar duit','remit','transfer','wise','mak','ayah','keluarga']},
+  {name:'Shopping', icon:'🛍️', kw:['shopping','baju','kasut','shopee','lazada','beli']},
+  {name:'Kesihatan', icon:'🩺', kw:['klinik','ubat','doktor','hospital','vitamin','farmasi','guardian','watsons']},
+  {name:'Sedekah', icon:'🤲', kw:['sedekah','derma','infaq','zakat','masjid','tabung']},
+  {name:'Lain-lain', icon:'✨', kw:[]},
+];
+const PALETTE = ['#e9c45c','#c9a8f4','#b8862b','#8f6bd0','#f7e7a1','#6e5a94','#d9a441','#e7d8ff','#a67c2e','#b59be0','#f2d77e','#7d68a6','#cfa24a','#efe6ff'];
+
+let state = load();
+let sel = {person:'all', month: ym(new Date()), cat:'Makanan', cur:'SGD'};
+
+function load(){
+  const d = {tx:[], budget:900, busFare:1.30, mrtFare:1.30, manualRate:0, rate:0, rateTime:0, cats:DEFAULT_CATS.map(c=>({name:c.name,icon:c.icon}))};
+  try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s && s.tx) return Object.assign(d, s); }catch(e){}
+  return d;
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ toast('Gagal simpan (storan penuh?)'); } }
+
+/* ---------- helpers ---------- */
+function pad(n){return String(n).padStart(2,'0')}
+function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function ym(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)}
+function parseD(s){const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])}
+const rate = () => state.manualRate || state.rate || FALLBACK_RATE;
+const num2 = n => (n||0).toLocaleString('en-SG',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt = n => (n<0?'-':'')+'S$' + num2(Math.abs(n));
+const fmt0 = n => 'S$' + Math.round(n||0).toLocaleString('en-SG');
+const rm = n => 'RM' + num2(n);
+const BULAN = ['Januari','Februari','Mac','April','Mei','Jun','Julai','Ogos','September','Oktober','November','Disember'];
+const HARI = ['Ahad','Isnin','Selasa','Rabu','Khamis','Jumaat','Sabtu'];
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function catIcon(n){const c=state.cats.find(c=>c.name===n);return c?c.icon:'✨'}
+function person(id){return PEOPLE.find(p=>p.id===id)||PEOPLE[0]}
+function filtered(){return state.tx.filter(t=>sel.person==='all'||t.who===sel.person)}
+function sum(a){return a.reduce((s,t)=>s+t.amt,0)}
+const toRm = (sgd) => sgd*rate();
+const BLN3=['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+function dateLbl(){const v=$('#fDate').value;$('#fDateTxt').textContent=v?(()=>{const d=parseD(v);return pad(d.getDate())+'/'+BLN3[d.getMonth()]+'/'+d.getFullYear()})():'Pilih tarikh';}
+function weekStart(d){const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);x.setHours(0,0,0,0);return x}
+let toastT; function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600)}
+function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+
+/* ---------- UI build ---------- */
+function buildPeople(){
+  const items=[{id:'all',name:'Semua',color:'#fff'}].concat(PEOPLE);
+  $('#people').innerHTML = items.map(p=>`<button class="pill ${sel.person===p.id?'on':''}" data-p="${p.id}">${p.id!=='all'?`<span class="dot" style="background:${p.color}"></span>`:'💼'} ${esc(p.name)}</button>`).join('');
+  $('#fWho').innerHTML = PEOPLE.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
+  $('#fWho').value = sel.person!=='all' ? sel.person : 'paynow';
+}
+function buildCats(){
+  $('#cats').innerHTML = state.cats.map(c=>`<button type="button" class="chip ${sel.cat===c.name?'on':''}" data-c="${esc(c.name)}">${c.icon} ${esc(c.name)}</button>`).join('')
+    + `<button type="button" class="chip add" id="addCat">＋ Kategori sendiri</button>`;
+}
+function setCur(c){
+  sel.cur=c;
+  document.querySelectorAll('#cur button').forEach(b=>b.classList.toggle('on',b.dataset.cur===c));
+  $('#curSym').textContent = c==='SGD'?'S$':'RM';
+  convHint();
+}
+function convHint(){
+  const v=parseAmt($('#fAmt').value);
+  $('#convHint').textContent = v>0 ? (sel.cur==='SGD' ? '≈ '+rm(v*rate()) : '≈ '+fmt(v/rate())) : '';
+}
+
+/* ---------- render ---------- */
+function render(){
+  const all = filtered();
+  const today = new Date(); const tStr = ymd(today);
+  const ws = weekStart(today); const we = new Date(ws); we.setDate(ws.getDate()+7);
+  const monthTx = all.filter(t=>t.date.startsWith(sel.month));
+  const todayTx = all.filter(t=>t.date===tStr);
+  const weekTx = all.filter(t=>{const d=parseD(t.date);return d>=ws&&d<we});
+  const mTotal = sum(monthTx);
+
+  $('#kToday').textContent = fmt(sum(todayTx)); $('#kTodayRm').textContent = '≈ '+rm(toRm(sum(todayTx)));
+  $('#kTodayN').textContent = `${todayTx.length} transaksi · ${HARI[today.getDay()]}`;
+  $('#kWeek').textContent = fmt(sum(weekTx)); $('#kWeekRm').textContent = '≈ '+rm(toRm(sum(weekTx)));
+  const wl=new Date(we-864e5);
+  $('#kWeekN').textContent = `${ws.getDate()} ${BLN3[ws.getMonth()]} – ${wl.getDate()} ${BLN3[wl.getMonth()]}`;
+  const YM = sel.month.split('-').map(Number), Y=YM[0], M=YM[1];
+  const dim = new Date(Y,M,0).getDate();
+  const isCur = sel.month===ym(today);
+  const daysPassed = isCur ? today.getDate() : (parseD(sel.month+'-01')>today?0:dim);
+  $('#kMonth').textContent = fmt(mTotal); $('#kMonthRm').textContent = '≈ '+rm(toRm(mTotal));
+  $('#kMonthN').textContent = `${BULAN[M-1]} ${Y} · purata ${fmt(daysPassed?mTotal/daysPassed:0)}/hari`;
+
+  const budget = sel.person==='all' ? state.budget : 0;
+  if(budget>0){
+    const left = budget - mTotal, pct = Math.min(100, mTotal/budget*100);
+    $('#kLeft').textContent = fmt(left);
+    $('#kBar').classList.toggle('warn', pct>=85);
+    $('#kBar').firstElementChild.style.width = pct+'%';
+    $('#kLeftN').textContent = `${pct.toFixed(0)}% daripada bajet ${fmt0(budget)}`;
+  } else {
+    $('#kLeft').textContent = sel.person==='all' ? '—' : fmt(mTotal);
+    $('#kBar').firstElementChild.style.width='0';
+    $('#kLeftN').textContent = sel.person==='all' ? 'Tetapkan bajet ⚙︎' : `Jumlah ${person(sel.person).short} bulan ini`;
+  }
+
+  const h=today.getHours();
+  $('#hHi').textContent=`${h<12?'Selamat pagi':h<15?'Selamat tengah hari':h<19?'Selamat petang':'Selamat malam'}, Kak Ngoh 🌸`;
+  $('#hTotal').textContent=fmt(mTotal);
+  $('#hMeta').textContent=`≈ ${rm(toRm(mTotal))} · ${sel.person==='all'?'Semua cara bayar':person(sel.person).name} · ${BULAN[M-1]} ${Y} · ${monthTx.length} transaksi`;
+
+  const trips = state.tx.filter(t=>t.date===tStr && (t.cat==='Bas'||t.cat==='MRT')).length;
+  $('#tripTag').textContent = `${trips} trip hari ini`;
+  $('#busFare').textContent = fmt(state.busFare); $('#mrtFare').textContent = fmt(state.mrtFare);
+
+  renderRate();
+  renderDaily(monthTx, Y, M, dim);
+  renderWeeks(monthTx, Y, M, dim, isCur ? today.getDate() : 0);
+  renderDonut(monthTx);
+  renderPersons();
+  renderList(monthTx);
+}
+
+function renderRate(){
+  const r=rate();
+  $('#r1').textContent='RM '+r.toFixed(4);
+  $('#r2').textContent='S$ '+(1/r).toFixed(4);
+  let m;
+  if(state.manualRate) m='Guna kadar manual dari ⚙︎ Tetapan.';
+  else if(state.rateTime){const d=new Date(state.rateTime);m=`Kadar pasaran · dikemas kini ${d.getDate()} ${BLN3[d.getMonth()]} ${pad(d.getHours())}:${pad(d.getMinutes())}.`;}
+  else m='Kadar anggaran — sambung internet & tekan ↻ untuk kadar terkini.';
+  $('#rateMeta').textContent = m+' Kadar app kirim duit mungkin berbeza sedikit.';
+}
+function syncConv(from){
+  const s=$('#cSgd'), m=$('#cMyr');
+  if(from==='sgd'){const v=parseAmt(s.value); m.value = isNaN(v)?'':(v*rate()).toFixed(2);}
+  else {const v=parseAmt(m.value); s.value = isNaN(v)?'':(v/rate()).toFixed(2);}
+}
+function getJSON(url){return fetch(url,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();});}
+function fetchRate(manual){
+  const tries=[
+    ()=>getJSON('https://open.er-api.com/v6/latest/SGD').then(j=>j.rates.MYR),
+    ()=>getJSON('https://api.frankfurter.app/latest?from=SGD&to=MYR').then(j=>j.rates.MYR),
+    ()=>getJSON('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/sgd.json').then(j=>j.sgd.myr),
+  ];
+  let i=0;
+  const next=()=>{
+    if(i>=tries.length){ if(manual) toast('Tak dapat sambung — guna kadar tersimpan'); return; }
+    tries[i++]().then(v=>{
+      if(!(v>1&&v<10)) throw 0;
+      state.rate=v; state.rateTime=Date.now(); save(); render(); syncConv('sgd'); convHint();
+      if(manual) toast('Kadar terkini: 1 SGD = RM'+v.toFixed(4));
+    }).catch(next);
+  };
+  next();
+}
+
+function renderDaily(tx, Y, M, dim){
+  const by = new Array(dim).fill(0);
+  tx.forEach(t=>{by[parseD(t.date).getDate()-1]+=t.amt});
+  const max = Math.max.apply(null, by.concat([1])), W=640, H=220, pl=40, pb=24, pt=14, cw=(W-pl-8)/dim;
+  const nice = niceMax(max);
+  let g = '<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".45" stop-color="#e2b84a"/><stop offset="1" stop-color="#8a6118"/></linearGradient><linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e9ff"/><stop offset="1" stop-color="#7b52c4"/></linearGradient></defs>';
+  for(let i=0;i<=4;i++){const y=pt+(H-pt-pb)*(1-i/4);g+=`<line x1="${pl}" x2="${W-4}" y1="${y}" y2="${y}" stroke="rgba(205,189,233,.12)"/><text x="${pl-6}" y="${y+3}" text-anchor="end">${i?Math.round(nice*i/4):0}</text>`}
+  const todayD = sel.month===ym(new Date()) ? new Date().getDate() : -1;
+  by.forEach((v,i)=>{
+    const h=(H-pt-pb)*v/nice, x=pl+i*cw+cw*.18, w=cw*.64, y=H-pb-h;
+    const dow = new Date(Y,M-1,i+1).getDay();
+    if(v>0) g+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${Math.min(3,w/2)}" fill="url(#${i+1===todayD?'gs':'gg'})"><title>${i+1} ${BULAN[M-1]}: ${fmt(v)}</title></rect>`;
+    if((i+1)%(dim>20?3:1)===1||i+1===dim) g+=`<text x="${x+w/2}" y="${H-8}" text-anchor="middle" ${dow===5?'style="fill:#e2b84a"':''}>${i+1}</text>`;
+  });
+  $('#daily').innerHTML = g;
+  const days = by.filter(v=>v>0).length;
+  const peak = by.indexOf(Math.max.apply(null,by));
+  $('#dailyTag').textContent = days ? `Tertinggi: ${peak+1} hb · ${fmt0(by[peak])}` : 'Tiada data';
+}
+function niceMax(m){const p=Math.pow(10,Math.floor(Math.log10(m)));const n=m/p;return (n<=1?1:n<=2?2:n<=5?5:10)*p}
+
+function renderWeeks(tx, Y, M, dim, todayD){
+  const weeks=[]; for(let s=1;s<=dim;s+=7) weeks.push({s, e:Math.min(s+6,dim), tot:0, n:0, cats:{}});
+  tx.forEach(t=>{const d=parseD(t.date).getDate(); const w=weeks[Math.floor((d-1)/7)]; w.tot+=t.amt; w.n++; w.cats[t.cat]=(w.cats[t.cat]||0)+t.amt;});
+  const max = Math.max.apply(null, weeks.map(w=>w.tot).concat([1]));
+  const mon = BLN3[M-1];
+  $('#weeks').innerHTML = weeks.map((w,i)=>{
+    const now = todayD>=w.s && todayD<=w.e;
+    return `<div class="wk ${now?'now':''}"><div class="nm">Minggu ${i+1}<small>${w.s}–${w.e} ${mon}</small></div><div class="bar"><i style="width:${w.tot/max*100}%"></i></div><div class="tt">${fmt0(w.tot)}</div></div>`;
+  }).join('');
+  const active = weeks.filter(w=>w.tot>0);
+  $('#weekTag').textContent = `${BULAN[M-1]} ${Y}`;
+  if(!active.length){ $('#insight').innerHTML='Belum ada perbelanjaan bulan ini. Tekan Bas / MRT atau rekod dengan suara di atas ✨'; return; }
+  const top = active.reduce((a,b)=>b.tot>a.tot?b:a);
+  const ti = weeks.indexOf(top);
+  const topCat = Object.entries(top.cats).sort((a,b)=>b[1]-a[1])[0];
+  const avg = sum(tx)/active.length;
+  let msg = `Minggu paling tinggi ialah <b>Minggu ${ti+1}</b> (${fmt(top.tot)} ≈ ${rm(toRm(top.tot))}), kebanyakannya untuk <b>${catIcon(topCat[0])} ${esc(topCat[0])}</b>. Purata seminggu <b>${fmt(avg)}</b>.`;
+  const ci = weeks.findIndex(w=>todayD>=w.s&&todayD<=w.e);
+  if(ci>0 && weeks[ci-1].tot>0){
+    const diff = weeks[ci].tot - weeks[ci-1].tot;
+    msg += diff>0 ? ` Minggu ini <b>${fmt(diff)} lebih</b> berbanding minggu lepas.` : ` Minggu ini jimat <b>${fmt(-diff)}</b> berbanding minggu lepas 👏`;
+  }
+  const transport = tx.filter(t=>t.cat==='Bas'||t.cat==='MRT');
+  if(transport.length) msg += ` Tambang Bas &amp; MRT bulan ini: <b>${fmt(sum(transport))}</b> (${transport.length} trip).`;
+  $('#insight').innerHTML = msg;
+}
+
+function renderDonut(tx){
+  const by={}; tx.forEach(t=>by[t.cat]=(by[t.cat]||0)+t.amt);
+  const ent = Object.entries(by).sort((a,b)=>b[1]-a[1]); const tot = sum(tx);
+  const R=64, C=2*Math.PI*R; let off=0, g='';
+  if(!tot){ g=`<circle cx="80" cy="80" r="${R}" fill="none" stroke="rgba(205,189,233,.15)" stroke-width="18"/>`; }
+  ent.forEach((e,i)=>{const k=e[0],v=e[1];const L=C*v/tot; g+=`<circle cx="80" cy="80" r="${R}" fill="none" stroke="${PALETTE[i%PALETTE.length]}" stroke-width="18" stroke-dasharray="${Math.max(L-1.5,.5)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 80 80)"><title>${esc(k)}: ${fmt(v)}</title></circle>`; off+=L;});
+  g+=`<text x="80" y="76" text-anchor="middle" style="font-size:10px;fill:#cdbde9">Jumlah</text><text x="80" y="94" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#f7e7a1">${fmt0(tot)}</text>`;
+  $('#donut').innerHTML=g;
+  $('#legend').innerHTML = ent.length ? ent.map((e,i)=>`<div class="lg"><i style="background:${PALETTE[i%PALETTE.length]}"></i><span>${catIcon(e[0])} ${esc(e[0])}</span><span class="p">${(e[1]/tot*100).toFixed(0)}%</span><span class="a">${fmt0(e[1])}</span></div>`).join('') : '<div class="empty">Tiada data kategori</div>';
+}
+
+function renderPersons(){
+  const m = state.tx.filter(t=>t.date.startsWith(sel.month));
+  $('#persons').innerHTML = PEOPLE.map(p=>{
+    const v=sum(m.filter(t=>t.who===p.id));
+    const bg={ezlink:'var(--gold-grad)',paynow:'var(--silver-grad)',kad:'linear-gradient(135deg,#e8f1fa,#8fb4d6 55%,#5d7f9e)',tunai:'linear-gradient(135deg,#ffe1e8,#e8a0b2)'}[p.id];
+    return `<div class="pc"><div class="av" style="background:${bg}">${p.icon}</div><div class="nm">${esc(p.short)}</div><div class="vv">${fmt0(v)}</div></div>`;
+  }).join('');
+}
+
+function renderList(tx){
+  if(!tx.length){ $('#list').innerHTML='<div class="empty">Tiada transaksi untuk bulan ini.</div>'; return; }
+  const s=tx.slice().sort((a,b)=>b.date.localeCompare(a.date)||b.ts-a.ts);
+  let h='', last='';
+  const daySum={}; s.forEach(t=>daySum[t.date]=(daySum[t.date]||0)+t.amt);
+  s.forEach(t=>{
+    if(t.date!==last){const d=parseD(t.date);h+=`<div class="day-h"><span>${HARI[d.getDay()]}, ${d.getDate()} ${BULAN[d.getMonth()]}</span><span>${fmt(daySum[t.date])}</span></div>`;last=t.date;}
+    const p=person(t.who);
+    const sub = t.cur==='MYR' ? `asal ${rm(t.orig)}` : `≈ ${rm(t.amt*(t.rate||rate()))}`;
+    h+=`<div class="tx"><div class="ic">${catIcon(t.cat)}</div><div><div class="t1">${esc(t.note||t.cat)}</div><div class="t2">${esc(t.cat)} · <span style="color:${p.color}">${esc(p.short)}</span>${t.via==='voice'?' · 🎙':''}</div></div><div class="am">${fmt(t.amt)}<small>${sub}</small></div><button class="del" data-del="${t.id}" aria-label="Padam">×</button></div>`;
+  });
+  $('#list').innerHTML=h;
+}
+
+/* ---------- events ---------- */
+$('#people').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b)return;sel.person=b.dataset.p;buildPeople();render();});
+$('#cats').addEventListener('click',e=>{
+  if(e.target.closest('#addCat')){$('#catName').value='';$('#catIcon').value='';$('#dlgCat').showModal();return;}
+  const b=e.target.closest('[data-c]'); if(!b)return; sel.cat=b.dataset.c; buildCats();
+  if(sel.cat==='Bas'||sel.cat==='MRT') $('#fWho').value='ezlink';
+});
+$('#cur').addEventListener('click',e=>{const b=e.target.closest('[data-cur]'); if(b) setCur(b.dataset.cur);});
+$('#month').addEventListener('change',e=>{if(e.target.value){sel.month=e.target.value;render();}});
+let lastVia='typed';
+function parseAmt(v){v=String(v).replace(/rm|s\$|sgd|\$/ig,'').replace(/\s/g,'');
+  if(/^\d{1,3}(\.\d{3})+(,\d{1,2})?$/.test(v)) v=v.replace(/\./g,'').replace(',','.');
+  else if(/,\d{1,2}$/.test(v) && v.indexOf('.')<0) v=v.replace(',','.');
+  else v=v.replace(/,/g,'');
+  return /^\d*\.?\d+$/.test(v)?parseFloat(v):NaN;}
+function addTx(t){
+  state.tx.push(t); save();
+  sel.month=t.date.slice(0,7); $('#month').value=sel.month;
+  render();
+}
+document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.quick, fare=k==='Bas'?state.busFare:state.mrtFare;
+  addTx({id:newId(),amt:fare,cur:'SGD',orig:fare,rate:rate(),cat:k,who:'ezlink',date:ymd(new Date()),note:'Tambang '+k,via:'quick',ts:Date.now()});
+  if(navigator.vibrate) navigator.vibrate(15);
+  toast(`${k==='Bas'?'🚌':'🚇'} ${k} ${fmt(fare)} ditambah`);
+}));
+$('#fAmt').addEventListener('input',()=>{ lastVia='typed'; convHint(); });
+$('#form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=parseAmt($('#fAmt').value);
+  if(!(v>0)){toast('Masukkan jumlah yang sah');$('#fAmt').focus();return;}
+  if(!$('#fDate').value) $('#fDate').value=ymd(new Date());
+  dateLbl();
+  const r=rate(), sgd = sel.cur==='SGD' ? v : v/r;
+  const t={id:newId(),amt:Math.round(sgd*100)/100,cur:sel.cur,orig:Math.round(v*100)/100,rate:r,cat:sel.cat,who:$('#fWho').value,date:$('#fDate').value,note:$('#fNote').value.trim(),via:lastVia,ts:Date.now()};
+  $('#fAmt').value=''; $('#fNote').value=''; lastVia='typed'; convHint();
+  if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  vHint.innerHTML=HINT_IDLE;
+  addTx(t); toast(`Disimpan: ${t.cur==='MYR'?rm(t.orig)+' → ':''}${fmt(t.amt)} · ${t.cat}`);
+});
+$('#list').addEventListener('click',e=>{const b=e.target.closest('[data-del]');if(!b)return;
+  if(!confirm('Padam transaksi ini?'))return;
+  state.tx=state.tx.filter(t=>t.id!==b.dataset.del);save();render();toast('Transaksi dipadam');});
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('dialog').close()));
+$('#btnBudget').addEventListener('click',()=>{
+  $('#budgetIn').value=state.budget||''; $('#busIn').value=state.busFare; $('#mrtIn').value=state.mrtFare; $('#rateIn').value=state.manualRate||'';
+  $('#dlgBudget').showModal();});
+$('#budgetSave').addEventListener('click',()=>{
+  state.budget=Math.max(0,parseFloat($('#budgetIn').value)||0);
+  const bus=parseFloat($('#busIn').value), mrt=parseFloat($('#mrtIn').value), r=parseFloat($('#rateIn').value);
+  if(bus>0) state.busFare=bus;
+  if(mrt>0) state.mrtFare=mrt;
+  state.manualRate = r>0 ? r : 0;
+  save();$('#dlgBudget').close();render();syncConv('sgd');convHint();toast('Tetapan disimpan');});
+$('#catSave').addEventListener('click',()=>{
+  const n=$('#catName').value.trim(); if(!n){toast('Tulis nama kategori');return;}
+  if(!state.cats.some(c=>c.name.toLowerCase()===n.toLowerCase())) state.cats.splice(state.cats.length-1,0,{name:n,icon:$('#catIcon').value.trim()||'🏷️'});
+  sel.cat=state.cats.find(c=>c.name.toLowerCase()===n.toLowerCase()).name; save(); buildCats(); $('#dlgCat').close(); toast('Kategori ditambah');
+});
+$('#btnRate').addEventListener('click',()=>fetchRate(true));
+$('#cSgd').addEventListener('input',()=>syncConv('sgd'));
+$('#cMyr').addEventListener('input',()=>syncConv('myr'));
+$('#btnCsv').addEventListener('click',()=>{
+  const rows=[['Tarikh','Jumlah (SGD)','Anggaran (MYR)','Dimasukkan dalam','Kategori','Cara Bayar','Catatan']].concat(
+    state.tx.filter(t=>t.date.startsWith(sel.month)).sort((a,b)=>a.date.localeCompare(b.date)).map(t=>[t.date,t.amt.toFixed(2),(t.amt*(t.rate||rate())).toFixed(2),t.cur==='MYR'?'RM '+t.orig.toFixed(2):'SGD',t.cat,person(t.who).name,t.note]));
+  const csv='\ufeff'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`bil-kak-ngoh-${sel.month}.csv`;a.click();
+});
+
+/* ---------- voice ---------- */
+const NUM={kosong:0,satu:1,se:1,dua:2,tiga:3,empat:4,lima:5,enam:6,tujuh:7,lapan:8,sembilan:9};
+function wordsToNumber(str){
+  return str.replace(/\b((?:(?:kosong|satu|dua|tiga|empat|lima|enam|tujuh|lapan|sembilan|sepuluh|sebelas|seratus|seribu|puluh|belas|ratus|ribu)\b\s*)+)/gi, m=>{
+    const w=m.trim().toLowerCase().split(/\s+/); let total=0,cur=0;
+    for(const x of w){
+      if(x==='sepuluh')cur+=10; else if(x==='sebelas')cur+=11; else if(x==='seratus')cur+=100; else if(x==='seribu'){total+=1000;}
+      else if(x==='belas')cur=(cur%10)+10+(cur-cur%10); else if(x==='puluh'){const u=cur%10;cur=cur-u+u*10;}
+      else if(x==='ratus'){const u=cur%100;cur=cur-u+u*100;} else if(x==='ribu'){total+=(cur||1)*1000;cur=0;}
+      else if(x in NUM)cur+=NUM[x];
+    }
+    return ' '+(total+cur)+' ';
+  });
+}
+const UNIT='(?:dolar|dollar|sgd|ringgit|rm)';
+function parseVoice(raw){
+  let s=' '+wordsToNumber(raw.toLowerCase()).replace(/,/g,'.').replace(/s\$/g,' dolar ')+' ';
+  let amt=null, cur=null;
+  if(/ringgit|\brm\b/.test(s)) cur='MYR'; else if(/dolar|dollar|sgd/.test(s)) cur='SGD';
+  let m=s.match(new RegExp('(\\d+(?:\\.\\d+)?)\\s*'+UNIT+'?\\s*(?:dan\\s*)?(\\d{1,2})\\s*sen'));
+  if(m) amt=parseFloat(m[1])+parseFloat(m[2])/100;
+  if(amt===null){
+    m=s.match(/(?:rm|sgd)\s*(\d+(?:\.\d{1,2})?)/)||s.match(new RegExp('(\\d+(?:\\.\\d{1,2})?)\\s*'+UNIT));
+    if(m)amt=parseFloat(m[1]);
+    const m2=s.match(new RegExp('(\\d+)\\s*'+UNIT+'\\s+(\\d{1,2})\\b(?!\\s*(?:dolar|dollar|ringgit|hb|haribulan))')); if(m2) amt=parseFloat(m2[1])+parseFloat(m2[2])/100;}
+  if(amt===null){m=s.match(/(\d+(?:\.\d{1,2})?)/);if(m)amt=parseFloat(m[1]);}
+  if(amt===null){m=s.match(/(\d+)\s*sen/);if(m)amt=parseFloat(m[1])/100;}
+  let who=null;
+  if(/ez\s*-?\s*link|simply\s*go|kad bas|kad mrt/.test(s))who='ezlink'; else if(/pay\s*now|paylah|qr|scan|grabpay|e-?wallet/.test(s))who='paynow'; else if(/\bkad\b|debit|kredit|bank|nets/.test(s))who='kad'; else if(/tunai|cash|duit kertas/.test(s))who='tunai';
+  let cat=null;
+  for(const c of state.cats){ if(s.indexOf(' '+c.name.toLowerCase())>=0){cat=c.name;break;} }
+  if(!cat){ let best=0; for(const c of DEFAULT_CATS){ for(const k of c.kw){ if(s.indexOf(' '+k)>=0 && k.length>best && state.cats.some(x=>x.name===c.name)){best=k.length;cat=c.name;} } } }
+  let date=null; const d=new Date();
+  if(/semalam|kelmarin/.test(s)){d.setDate(d.getDate()-(/kelmarin/.test(s)?2:1));date=ymd(d);}
+  let note=raw.replace(/\b(rm|ringgit|dolar|dollar|sgd|sen|untuk|bagi|kepada|beli|belanja|hari ini|semalam|kelmarin|dan)\b/gi,' ').replace(/s\$/gi,' ')
+    .replace(/\d+([.,]\d+)?/g,' ');
+  note=wordsToNumber(note).replace(/\d+/g,' ');
+  ['guna','pakai','ez-link','ez link','ezlink','simplygo','simply go','paynow','pay now','paylah','qr','scan','kad','debit','nets','tunai','cash','saya'].forEach(n=>note=note.replace(new RegExp('\\b'+n+'\\b','gi'),' '));
+  if(cat) note=note.replace(new RegExp('\\b'+cat.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','gi'),' ');
+  note=note.replace(/\s+/g,' ').trim(); if(note) note=note[0].toUpperCase()+note.slice(1);
+  return {amt,cur,who,cat,date,note};
+}
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const V={rec:null,state:'idle',heard:'',applied:false,timers:[]};
+const micBtn=$('#mic'), vHint=$('#vHint');
+const HINT_IDLE=vHint.innerHTML;
+function vClear(){V.timers.forEach(clearTimeout);V.timers=[];}
+function vLater(fn,ms){V.timers.push(setTimeout(fn,ms));}
+function vUI(on){micBtn.classList.toggle('rec',on);micBtn.setAttribute('aria-pressed',on?'true':'false');micBtn.setAttribute('aria-label',on?'Berhenti rekod':'Rekod suara');}
+function applyVoice(txt){
+  txt=(txt||'').trim(); if(!txt) return false;
+  const r=parseVoice(txt);
+  if(r.cur) setCur(r.cur);
+  if(r.amt!=null) $('#fAmt').value=r.amt.toFixed(2);
+  if(r.who) $('#fWho').value=r.who;
+  if(r.cat){sel.cat=r.cat;buildCats();}
+  if(r.date){ $('#fDate').value=r.date; dateLbl(); }
+  if(r.note) $('#fNote').value=r.note;
+  lastVia='voice'; convHint();
+  vHint.innerHTML = r.amt!=null
+    ? `✅ “${esc(txt)}” → <b>${sel.cur==='SGD'?fmt(r.amt):rm(r.amt)}</b> · ${esc(sel.cat)} · ${esc(person($('#fWho').value).short)} — semak & tekan Simpan`
+    : `⚠️ “${esc(txt)}” — jumlah tidak dikesan, sila taip jumlah atau cuba lagi.`;
+  return true;
+}
+function vFinish(r,msg){
+  if(r!==V.rec) return;
+  vClear();
+  const old=V.rec; V.rec=null; V.state='idle';
+  old.onstart=old.onresult=old.onerror=old.onend=old.onspeechend=null;
+  try{old.abort();}catch(e){}
+  vUI(false);
+  if(!V.applied && V.heard){V.applied=true;applyVoice(V.heard);}
+  else if(msg) vHint.innerHTML=msg;
+  else if(!V.applied) vHint.innerHTML=HINT_IDLE;
+}
+function vStart(){
+  if(!SR){toast('Pelayar ini tidak sokong suara. Cuba Chrome terkini.');return;}
+  if(!window.isSecureContext){toast('Suara perlukan pautan https:// (cth: GitHub Pages)');return;}
+  if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
+  const r=new SR();
+  r.lang='ms-MY'; r.interimResults=true; r.continuous=false; r.maxAlternatives=1;
+  V.rec=r; V.state='starting'; V.heard=''; V.applied=false;
+  r.onstart=()=>{ if(r!==V.rec) return; V.state='listening';
+    vHint.innerHTML='🎙 Sedang mendengar… sebut jumlah, kategori & cara bayar. Tekan lagi untuk berhenti.'; };
+  r.onresult=e=>{
+    if(r!==V.rec) return;
+    const last=e.results[e.results.length-1];
+    V.heard=last[0].transcript;
+    if(last.isFinal){ V.applied=true; applyVoice(V.heard); V.state='stopping';
+      try{r.stop();}catch(_){}
+      vLater(()=>vFinish(r),1200); }
+    else vHint.innerHTML='🎙 “<b>'+esc(V.heard)+'</b>”';
+  };
+  r.onerror=e=>{
+    if(r!==V.rec) return;
+    const m={'not-allowed':'🔒 Benarkan akses mikrofon untuk laman ini (ikon 🔒 di bar alamat).',
+      'service-not-allowed':'🔒 Benarkan akses mikrofon untuk laman ini.',
+      'no-speech':'🤫 Tiada suara dikesan. Tekan 🎙 dan cuba lagi.',
+      'audio-capture':'🎤 Mikrofon tidak dijumpai atau sedang digunakan aplikasi lain.',
+      'network':'📶 Tiada sambungan internet — suara perlukan internet. Sila taip dahulu.',
+      'language-not-supported':'Bahasa Melayu tidak disokong peranti ini.'}[e.error];
+    vFinish(r, e.error==='aborted' ? null : (m||'⚠️ Ralat suara ('+esc(e.error)+'). Cuba lagi.'));
+  };
+  r.onend=()=>vFinish(r);
+  vUI(true); vHint.innerHTML='🎙 Bersedia…';
+  vLater(()=>{ if(r===V.rec && V.state==='starting') vFinish(r,'⚠️ Mikrofon tidak bermula. Tekan 🎙 sekali lagi.'); },6000);
+  vLater(()=>{ if(r===V.rec){ V.state='stopping'; try{r.stop();}catch(_){} vLater(()=>vFinish(r),1500);} },15000);
+  try{ r.start(); }catch(err){ vFinish(r,'⚠️ Tidak dapat mula rekod. Tekan 🎙 sekali lagi.'); }
+}
+function vStop(){
+  const r=V.rec; if(!r) return;
+  if(V.state==='stopping'){ vFinish(r); return; }
+  V.state='stopping';
+  try{ r.stop(); }catch(e){}
+  vLater(()=>vFinish(r),1500);
+}
+micBtn.addEventListener('click',()=>{ V.rec ? vStop() : vStart(); });
+document.addEventListener('visibilitychange',()=>{ if(document.hidden && V.rec) vFinish(V.rec); });
+
+/* ---------- init ---------- */
+$('#month').value=sel.month; $('#fDate').value=ymd(new Date()); dateLbl();
+['input','change'].forEach(ev=>$('#fDate').addEventListener(ev,dateLbl));
+buildPeople(); buildCats(); render(); syncConv('sgd');
+if(!state.rateTime || Date.now()-state.rateTime > 3*3600e3) fetchRate(false);
+if('serviceWorker' in navigator && window.isSecureContext) navigator.serviceWorker.register('sw.js').catch(()=>{});
+/* ---------- install (PWA) ---------- */
+let deferredPrompt=null;
+const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+const btnI=$('#btnInstall');
+if(!standalone()) btnI.hidden=false;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;btnI.hidden=false;});
+window.addEventListener('appinstalled',()=>{deferredPrompt=null;btnI.hidden=true;toast('App berjaya dipasang ✓');});
+btnI.addEventListener('click',()=>{
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{deferredPrompt=null;if(r.outcome==='accepted')btnI.hidden=true;});return;}
+  let m;
+  if(location.protocol!=='https:') m='App ini dibuka sebagai fail, bukan dari laman web. Untuk install, buka melalui link <b>https://</b> (contoh GitHub Pages), kemudian tekan butang ini sekali lagi.';
+  else if(/iphone|ipad/i.test(navigator.userAgent)) m='Di Safari: tekan butang <b>Kongsi ⬆</b> → <b>Tambah ke Skrin Utama</b>.';
+  else m='Di Chrome: tekan menu <b>⋮</b> (atas kanan) → <b>Install app</b> / <b>Tambah ke skrin utama</b>.<br><br>Kalau pilihan itu tiada, tutup semua tab app ini, buka semula link dan tunggu 10 saat, kemudian cuba lagi. Pastikan guna <b>Google Chrome</b> (bukan browser dalam WhatsApp/Facebook).';
+  $('#installMsg').innerHTML=m;$('#dlgInstall').showModal();
+});
+})();
+</script>
 </body>
 </html>
