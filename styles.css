@@ -29,7 +29,7 @@ body {
 
 .bg {
   position: fixed; inset: 0; z-index: -2;
-  background: url("assets/bg.jpg?v=3") center 30% / cover no-repeat;
+  background: url("assets/bg.jpg?v=5") center 30% / cover no-repeat;
   transform: scale(1.06);
   animation: drift 40s ease-in-out infinite alternate;
 }

@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
   <div class="bg" aria-hidden="true"></div>
@@ -154,7 +154,20 @@
       <p class="hint center" id="amountConv">≈ RM0.00</p>
 
       <p class="label">Kategori</p>
-      <div class="cats" id="cats"></div>
+      <div class="cats" id="cats">
+        <button type="button" class="cat" data-cat="bus"><span>🚌</span>Bas</button>
+        <button type="button" class="cat" data-cat="mrt"><span>🚇</span>MRT</button>
+        <button type="button" class="cat" data-cat="grab"><span>🚕</span>Grab/Teksi</button>
+        <button type="button" class="cat" data-cat="makan"><span>🍛</span>Makan</button>
+        <button type="button" class="cat" data-cat="minum"><span>🧋</span>Minum</button>
+        <button type="button" class="cat" data-cat="barang"><span>🛒</span>Barang</button>
+        <button type="button" class="cat" data-cat="sewa"><span>🏠</span>Sewa</button>
+        <button type="button" class="cat" data-cat="bil"><span>📱</span>Bil/Topup</button>
+        <button type="button" class="cat" data-cat="kirim"><span>💸</span>Kirim Duit</button>
+        <button type="button" class="cat" data-cat="shopping"><span>🛍️</span>Shopping</button>
+        <button type="button" class="cat" data-cat="kesihatan"><span>💊</span>Kesihatan</button>
+        <button type="button" class="cat" data-cat="lain"><span>✨</span>Lain-lain</button>
+      </div>
 
       <div class="two">
         <label class="field">
@@ -214,6 +227,6 @@
 
   <div class="toast" id="toast" role="status"></div>
 
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>

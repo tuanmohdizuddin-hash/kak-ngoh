@@ -44,7 +44,7 @@
         };
       }
     } catch (_) {}
-    return structuredClone(defaults);
+    return JSON.parse(JSON.stringify(defaults));
   }
   function save() {
     try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (_) {}
@@ -141,7 +141,7 @@
 
   function renderBreakdown(items, total) {
     const by = {};
-    items.forEach(e => { (by[e.cat] ||= { sgd: 0, n: 0 }); by[e.cat].sgd += toSgd(e); by[e.cat].n++; });
+    items.forEach(e => { if (!by[e.cat]) by[e.cat] = { sgd: 0, n: 0 }; by[e.cat].sgd += toSgd(e); by[e.cat].n++; });
     const rows = Object.entries(by).sort((a, b) => b[1].sgd - a[1].sgd);
     const el = $("#breakdown");
     if (!rows.length) { el.innerHTML = `<div class="empty">Belum ada belanja untuk tempoh ini.</div>`; return; }
@@ -233,6 +233,7 @@
   function closeSheet(w) { w.classList.remove("open"); w.setAttribute("aria-hidden", "true"); }
 
   function buildCats() {
+    if (document.querySelector(".cat")) return;
     $("#cats").innerHTML = CATS.map(c => `<button type="button" class="cat" data-cat="${c.id}"><span>${c.icon}</span>${c.name}</button>`).join("");
   }
   function setCat(id) { formCat = id; $$(".cat").forEach(b => b.classList.toggle("active", b.dataset.cat === id)); }
@@ -377,6 +378,6 @@
   if (!state.rate.time || Date.now() - state.rate.time > 3 * 3600e3) fetchRate(false);
 
   if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-    navigator.serviceWorker.register("sw.js?v=4").catch(() => {});
+    navigator.serviceWorker.register("sw.js?v=5").catch(() => {});
   }
 })();

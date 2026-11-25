@@ -1,5 +1,5 @@
-const CACHE = "kakngoh-v4";
-const ASSETS = ["./", "index.html", "styles.css?v=3", "app.js?v=3", "manifest.webmanifest", "assets/bg.jpg?v=3", "assets/icon.svg", "assets/icon-192.png", "assets/icon-512.png"];
+const CACHE = "kakngoh-v5";
+const ASSETS = ["./", "index.html", "styles.css?v=5", "app.js?v=5", "manifest.webmanifest", "assets/bg.jpg?v=5", "assets/icon.svg", "assets/icon-192.png", "assets/icon-512.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))); self.skipWaiting(); });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))));
